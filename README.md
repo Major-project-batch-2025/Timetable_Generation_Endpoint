@@ -2,7 +2,7 @@
 
 An intelligent **automated timetable generator** built using **Constraint Programming** and exposed via a **Flask API Endpoint**. This project generates valid weekly timetables based on predefined **constraints** and makes it easy to retrieve schedules on-demand.
 
----
+
 
 ## 🎯 Project Purpose
 
