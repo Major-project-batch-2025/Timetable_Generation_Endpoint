@@ -2,80 +2,85 @@
 
 An intelligent **automated timetable generator** built using **Constraint Programming** and exposed via a **Flask API Endpoint**. This project generates valid weekly timetables based on predefined **constraints** and makes it easy to retrieve schedules on-demand.
 
+---
+
 ## 🎯 Project Purpose
 
 The goal of this project is to automatically generate an optimal timetable that satisfies real-world academic scheduling rules using **Google OR-Tools**. This ensures fairness, efficiency, and flexibility in academic planning.
 With just one API call, the system builds an efficient weekly schedule for all sections, avoiding conflicts and overloads.
 
+---
+
 ## ✅ Constraints Handled
 
-### 🧑‍🏫 Teacher Conflict Constraints
-- No teacher can be assigned to multiple sections in the same time slot
-- Each teacher can teach at most one theory class per day per section when not conducting labs
+This system guarantees the generated timetable satisfies the following conditions:
 
-### 🏫 Classroom & Lab Availability
-- Maximum of `num_of_classrooms` concurrent theory classes at any time
-- Maximum of `num_of_labrooms` concurrent lab sessions
-- Lab sessions require dedicated lab rooms
+- 🧑‍🏫 **Teacher Conflict Constraint**  
+  > A teacher cannot teach in more than one section at the same time.
+  > No teacher can be assigned to multiple sections in the same time slot.
 
-### ⏱ Schedule Optimization
-- Minimizes internal idle periods (gaps between classes) within each day
-- Lab sessions are scheduled in continuous 2-hour blocks using predefined pairs:
-  - 8:30-10:30
-  - 11:00-1:00
-  - 2:00-4:00
+- 🏫 **Classroom & Lab Availability**  
+  > - Maximum of `num_of_classrooms` concurrent theory classes at any time
+  > - Maximum of `num_of_labrooms` concurrent lab sessions
+  > - Lab sessions require dedicated lab rooms
 
-### 🕐 Time Constraints
-- Classes run Monday through Saturday
-- No classes after 1:00 PM on Saturdays
-- Fixed break period from 10:30 AM to 11:00 AM
-- Daily time slots:
-  ```
-  8:30-9:30  | 9:30-10:30 | 11:00-12:00
-  12:00-1:00 | 2:00-3:00  | 3:00-4:00
-  ```
+- ⏱ **Schedule Optimization**  
+  > - Minimizes idle periods between classes
+  > - Lab sessions are scheduled in continuous 2-hour blocks
+  > - Fair distribution of classes across the week
+
+- 🕐 **Time Constraints**  
+  > - No classes after 1:00 PM on Saturdays
+  > - Classes scheduled between 8:30 AM to 4:00 PM
+  > - Break period from 10:30 AM to 11:00 AM
+
+---
 
 ## 🔧 Technical Features
 
-- **Constraint Solver**: Google OR-Tools CP-SAT solver with randomized seed
-- **Dynamic Scheduling**: Handles variable sections, courses, and teachers
-- **Flexible API**: JSON-based REST API
-- **Lab Management**: Special handling for consecutive lab slots
-- **Optimization**: Quadratic penalty function for minimizing schedule gaps
-- **Validation**: Comprehensive constraint checking
+- **Constraint Solver**: Uses Google OR-Tools CP-SAT solver
+- **Dynamic Scheduling**: Handles variable numbers of sections, courses, and teachers
+- **Flexible API**: JSON-based REST API for easy integration
+- **Lab Management**: Special handling for lab courses requiring consecutive slots
+- **Optimization**: Minimizes schedule gaps and maximizes resource utilization
+
+---
 
 ## 🧪 Tech Stack
 
-- 🐍 **Python**: Core programming language
-- 🧩 **Google OR-Tools**: Constraint programming solver
-- 🌐 **Flask**: API endpoint framework
-- 📊 **Tabulate**: Output formatting
+- 🐍 **Python 3.13+**
+- 🧩 **Google OR-Tools**: For constraint programming
+- 🌐 **Flask**: For API endpoints
+- 📊 **Tabulate**: For formatted output
+- ⚙️ **uv**: Ultra-fast Python package manager
 
-## 🚀 Setup Instructions
+---
 
-1. Clone the repository:
+## 🚀 Setup & Run Instructions
+
+### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/Major-project-batch-2025/Timetable_Generation_Endpoint.git
 ```
 
-2. Navigate to project directory:
+### 2️⃣ Change Directory
 ```bash
 cd Timetable_Generation_Endpoint
 ```
 
-3. Install dependencies:
+### 3️⃣ Install Dependencies
 ```bash
-pip install -r requirements.txt
+uv add -r requirements.txt
 ```
 
-4. Start the Flask server:
+### 4️⃣ Run The Flask App
 ```bash
-python app.py
+uv run ./app.py
 ```
 
 ## 📡 API Usage
 
-Send a POST request to `/generate-timetable` with the following JSON structure:
+Send a POST request to `/generate-timetable` with JSON payload containing:
 
 ```json
 {
