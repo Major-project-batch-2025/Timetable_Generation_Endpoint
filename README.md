@@ -18,23 +18,40 @@ This system guarantees the generated timetable satisfies the following condition
 - 🧑‍🏫 **Teacher Conflict Constraint**  
   > A teacher cannot teach in more than one section at the same time.
 
-- 🏫 **Classroom Availability Constraint**  
-  > Only `(number_of_sections - 1)` classrooms are available at any given time.
+- 🏫 **Classroom & Lab Availability**  
+  > - Only `(number_of_sections - 1)` classrooms are available at any given time
+  > - Lab sessions require dedicated lab rooms
+  > - Limited number of lab rooms available simultaneously
 
-- ⏱ **2-Hour Gap Constraint**  
-  > A teacher must have a **minimum 2-hour break** between two classes in a day.
+- ⏱ **Schedule Optimization**  
+  > - Minimizes idle periods between classes
+  > - Lab sessions are scheduled in continuous 2-hour blocks
+  > - Fair distribution of classes across the week
 
-- 🕐 **Saturday Constraint**  
-  > No classes are allowed **after 1:00 PM** on Saturdays.
+- 🕐 **Time Constraints**  
+  > - No classes after 1:00 PM on Saturdays
+  > - Classes scheduled between 8:30 AM to 4:00 PM
+  > - Break period from 10:30 AM to 11:00 AM
+
+---
+
+## 🔧 Technical Features
+
+- **Constraint Solver**: Uses Google OR-Tools CP-SAT solver
+- **Dynamic Scheduling**: Handles variable numbers of sections, courses, and teachers
+- **Flexible API**: JSON-based REST API for easy integration
+- **Lab Management**: Special handling for lab courses requiring consecutive slots
+- **Optimization**: Minimizes schedule gaps and maximizes resource utilization
 
 ---
 
 ## 🧪 Tech Stack
 
-- 🐍 **Python 3**
-- 🧩 **Google OR-Tools**
-- 🌐 **Flask**
-- ⚙️ **uv** - ultra-fast Python package manager and runner
+- 🐍 **Python 3.13+**
+- 🧩 **Google OR-Tools**: For constraint programming
+- 🌐 **Flask**: For API endpoints
+- 📊 **Tabulate**: For formatted output
+- ⚙️ **uv**: Ultra-fast Python package manager
 
 ---
 
@@ -42,31 +59,44 @@ This system guarantees the generated timetable satisfies the following condition
 
 ### 1️⃣ Clone the Repository
 ```bash
-
-git clone git clone https://github.com/Major-project-batch-2025/Timetable_Generation_Endpoint.git
-
+git clone https://github.com/Major-project-batch-2025/Timetable_Generation_Endpoint.git
 ```
 
-###  Change Directory
+### 2️⃣ Change Directory
 ```bash
-
 cd Timetable_Generation_Endpoint
-
 ```
 
-###  Install Dependencies
+### 3️⃣ Install Dependencies
 ```bash
-
 uv add -r requirements.txt
-
 ```
 
-###  Run The Flask App
+### 4️⃣ Run The Flask App
 ```bash
-
 uv run ./app.py
-
 ```
 
+## 📡 API Usage
 
+Send a POST request to `/generate-timetable` with JSON payload containing:
 
+```json
+{
+    "sections": ["SectionA", "SectionB", ...],
+    "section_course_teacher": {
+        "SectionA": {
+            "Course1": "Teacher1",
+            "LabCourse1": "LabTeacher1"
+        }
+    },
+    "course_req": {
+        "Course1": 3  // Weekly sessions needed
+    },
+    "num_of_classrooms": 2,
+    "num_of_labrooms": 1,
+    "all_lab_course_names": ["LabCourse1"],
+    "lab_course_sessions_needed": {
+        "LabCourse1": 2  // Weekly lab sessions needed
+    }
+}
